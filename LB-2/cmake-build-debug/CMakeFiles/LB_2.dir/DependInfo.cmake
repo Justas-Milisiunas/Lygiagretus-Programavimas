@@ -4,6 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
+  "/home/justas327/Github/Lygiagretus-Programavimas/LB-2/Monitor.cpp" "/home/justas327/Github/Lygiagretus-Programavimas/LB-2/cmake-build-debug/CMakeFiles/LB_2.dir/Monitor.cpp.o"
   "/home/justas327/Github/Lygiagretus-Programavimas/LB-2/main.cpp" "/home/justas327/Github/Lygiagretus-Programavimas/LB-2/cmake-build-debug/CMakeFiles/LB_2.dir/main.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")

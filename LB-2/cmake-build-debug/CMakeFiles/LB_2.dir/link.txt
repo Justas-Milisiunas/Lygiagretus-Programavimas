@@ -1,1 +1,1 @@
-/usr/bin/c++  -g   CMakeFiles/LB_2.dir/main.cpp.o  -o LB_2 
+/usr/bin/c++  -g   CMakeFiles/LB_2.dir/main.cpp.o CMakeFiles/LB_2.dir/Monitor.cpp.o  -o LB_2 

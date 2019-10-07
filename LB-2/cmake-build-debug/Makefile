@@ -123,6 +123,33 @@ LB_2/fast:
 	$(MAKE) -f CMakeFiles/LB_2.dir/build.make CMakeFiles/LB_2.dir/build
 .PHONY : LB_2/fast
 
+Monitor.o: Monitor.cpp.o
+
+.PHONY : Monitor.o
+
+# target to build an object file
+Monitor.cpp.o:
+	$(MAKE) -f CMakeFiles/LB_2.dir/build.make CMakeFiles/LB_2.dir/Monitor.cpp.o
+.PHONY : Monitor.cpp.o
+
+Monitor.i: Monitor.cpp.i
+
+.PHONY : Monitor.i
+
+# target to preprocess a source file
+Monitor.cpp.i:
+	$(MAKE) -f CMakeFiles/LB_2.dir/build.make CMakeFiles/LB_2.dir/Monitor.cpp.i
+.PHONY : Monitor.cpp.i
+
+Monitor.s: Monitor.cpp.s
+
+.PHONY : Monitor.s
+
+# target to generate assembly for a file
+Monitor.cpp.s:
+	$(MAKE) -f CMakeFiles/LB_2.dir/build.make CMakeFiles/LB_2.dir/Monitor.cpp.s
+.PHONY : Monitor.cpp.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -159,6 +186,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... LB_2"
 	@echo "... edit_cache"
+	@echo "... Monitor.o"
+	@echo "... Monitor.i"
+	@echo "... Monitor.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
