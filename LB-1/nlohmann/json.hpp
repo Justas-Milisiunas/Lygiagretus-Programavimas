@@ -3186,6 +3186,11 @@ namespace nlohmann
 {
 namespace detail
 {
+template<typename string_type>
+void int_to_string( string_type& target, int value )
+{
+    target = std::to_string(value);
+}
 template <typename IteratorType> class iteration_proxy_value
 {
   public:
@@ -3194,6 +3199,7 @@ template <typename IteratorType> class iteration_proxy_value
     using pointer = value_type * ;
     using reference = value_type & ;
     using iterator_category = std::input_iterator_tag;
+    using string_type = typename std::remove_cv< typename std::remove_reference<decltype( std::declval<IteratorType>().key() ) >::type >::type;
 
   private:
     /// the iterator
@@ -3203,9 +3209,9 @@ template <typename IteratorType> class iteration_proxy_value
     /// last stringified array index
     mutable std::size_t array_index_last = 0;
     /// a string representation of the array index
-    mutable std::string array_index_str = "0";
+    mutable string_type array_index_str = "0";
     /// an empty string (to return a reference for primitive values)
-    const std::string empty_str = "";
+    const string_type empty_str = "";
 
   public:
     explicit iteration_proxy_value(IteratorType it) noexcept : anchor(it) {}
@@ -3238,7 +3244,7 @@ template <typename IteratorType> class iteration_proxy_value
     }
 
     /// return key of the iterator
-    const std::string& key() const
+    const string_type& key() const
     {
         assert(anchor.m_object != nullptr);
 
@@ -3249,7 +3255,7 @@ template <typename IteratorType> class iteration_proxy_value
             {
                 if (array_index != array_index_last)
                 {
-                    array_index_str = std::to_string(array_index);
+                    int_to_string( array_index_str, array_index );
                     array_index_last = array_index;
                 }
                 return array_index_str;
@@ -5678,7 +5684,7 @@ class binary_reader
                     const int exp = (half >> 10u) & 0x1Fu;
                     const unsigned int mant = half & 0x3FFu;
                     assert(0 <= exp and exp <= 32);
-                    assert(0 <= mant and mant <= 1024);
+                    assert(mant <= 1024);
                     switch (exp)
                     {
                         case 0:
@@ -10232,7 +10238,7 @@ class json_pointer
 
     @since version 3.6.0
     */
-    const std::string& back()
+    const std::string& back() const
     {
         if (JSON_HEDLEY_UNLIKELY(empty()))
         {
@@ -12044,13 +12050,12 @@ class binary_writer
     */
     static std::size_t calc_bson_array_size(const typename BasicJsonType::array_t& value)
     {
-        std::size_t embedded_document_size = 0ul;
         std::size_t array_index = 0ul;
 
-        for (const auto& el : value)
+        const std::size_t embedded_document_size = std::accumulate(std::begin(value), std::end(value), 0ul, [&array_index](std::size_t result, const typename BasicJsonType::array_t::value_type & el)
         {
-            embedded_document_size += calc_bson_element_size(std::to_string(array_index++), el);
-        }
+            return result + calc_bson_element_size(std::to_string(array_index++), el);
+        });
 
         return sizeof(std::int32_t) + embedded_document_size + 1ul;
     }

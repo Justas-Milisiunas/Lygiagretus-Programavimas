@@ -13,8 +13,8 @@
 using namespace std;
 using json = nlohmann::json;
 
-#define DATA_FILE_PATH "//home//justas327//Desktop//Lygiagretus programavimas//LD-1//data//IFF-7_2_MilisiunasJ_L1_dat_1.json"
-#define RESULT_FILE_PATH "//home//justas327//Desktop//Lygiagretus programavimas//LD-1//data//IFF-7_2_MilisiunasJ_L1_rez.txt"
+#define DATA_FILE_PATH "//home//justas327//Github//Lygiagretus-Programavimas//LB-1//data//IFF-7_2_MilisiunasJ_L1_dat_1.json"
+#define RESULT_FILE_PATH "//home//justas327//Github//Lygiagretus-Programavimas//LB-1//data//IFF-7_2_MilisiunasJ_L1_rez.txt"
 #define FILTER_CONDITION 50000
 
 void filterCars(SafeThreadedList &, int, int, SafeThreadedList &);
