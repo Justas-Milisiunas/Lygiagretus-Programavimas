@@ -123,6 +123,33 @@ LB_2/fast:
 	$(MAKE) -f CMakeFiles/LB_2.dir/build.make CMakeFiles/LB_2.dir/build
 .PHONY : LB_2/fast
 
+Car.o: Car.cpp.o
+
+.PHONY : Car.o
+
+# target to build an object file
+Car.cpp.o:
+	$(MAKE) -f CMakeFiles/LB_2.dir/build.make CMakeFiles/LB_2.dir/Car.cpp.o
+.PHONY : Car.cpp.o
+
+Car.i: Car.cpp.i
+
+.PHONY : Car.i
+
+# target to preprocess a source file
+Car.cpp.i:
+	$(MAKE) -f CMakeFiles/LB_2.dir/build.make CMakeFiles/LB_2.dir/Car.cpp.i
+.PHONY : Car.cpp.i
+
+Car.s: Car.cpp.s
+
+.PHONY : Car.s
+
+# target to generate assembly for a file
+Car.cpp.s:
+	$(MAKE) -f CMakeFiles/LB_2.dir/build.make CMakeFiles/LB_2.dir/Car.cpp.s
+.PHONY : Car.cpp.s
+
 Monitor.o: Monitor.cpp.o
 
 .PHONY : Monitor.o
@@ -186,6 +213,9 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... LB_2"
 	@echo "... edit_cache"
+	@echo "... Car.o"
+	@echo "... Car.i"
+	@echo "... Car.s"
 	@echo "... Monitor.o"
 	@echo "... Monitor.i"
 	@echo "... Monitor.s"

@@ -1,9 +1,9 @@
 //
-// Created by justas327 on 2019-10-01.
+// Created by justas327 on 2019-10-07.
 //
 
-#ifndef LD_1_CAR_H
-#define LD_1_CAR_H
+#ifndef LB_2_CAR_H
+#define LB_2_CAR_H
 
 #include "nlohmann/json.hpp"
 #include <string>
@@ -34,4 +34,4 @@ public:
 };
 
 
-#endif //LD_1_CAR_H
+#endif //LB_2_CAR_H

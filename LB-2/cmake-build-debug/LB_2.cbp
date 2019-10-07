@@ -84,6 +84,12 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/justas327/Github/Lygiagretus-Programavimas/LB-2/Car.cpp">
+			<Option target="LB_2"/>
+		</Unit>
+		<Unit filename="/home/justas327/Github/Lygiagretus-Programavimas/LB-2/Car.h">
+			<Option target="LB_2"/>
+		</Unit>
 		<Unit filename="/home/justas327/Github/Lygiagretus-Programavimas/LB-2/Monitor.cpp">
 			<Option target="LB_2"/>
 		</Unit>
