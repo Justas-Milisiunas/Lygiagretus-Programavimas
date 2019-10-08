@@ -11,7 +11,7 @@ void Car::fromJson(json data) {
 }
 
 int Car::getNumber() {
-    int number = ((makeYear + (int) mileage + (int) brand[0]) / 5000) % 40;
+    int number = ((makeYear + (int) mileage + (int) brand[0]) % 38);
     return fib(number);
 }
 

@@ -7,6 +7,7 @@
 #include <iostream>
 #include <wait.h>
 #include <sys/wait.h>
+#include <unistd.h>
 #include "Monitor.h"
 
 Monitor::Monitor(int size) {
@@ -20,62 +21,80 @@ Monitor::~Monitor() {
     delete[] list;
 }
 
-void Monitor::add(Car& new_car) {
-    omp_set_lock(&lock);
-    if (this->size == capacity || finished) {
-        omp_unset_lock(&lock);
-        return;
+void Monitor::add(Car &new_car) {
+    while (this->size == capacity) {
     }
-
-    unsigned int index = find_index(new_car);
-    if(index != -1) {
-        shift_list(index);
-        list[index] = new_car;
-        size++;
+#pragma omp critical
+    {
+        if (this->size != this->capacity) {
+            int index = find_index(new_car);
+            shift_list(index);
+            list[index] = new_car;
+            size++;
+        }
     }
-
-    omp_unset_lock(&lock);
 }
 
 unsigned int Monitor::get_size() {
     return this->size;
 }
 
-int Monitor::find_index(Car& car) {
+int Monitor::find_index(Car &car) {
     int condition = car.getNumber();
+    int index = 0;
 
     for (unsigned int i = 0; i < size; i++) {
         if (condition < list[i].getNumber())
             return i;
+
+        index++;
     }
 
-    return -1;
+    return index;
 }
 
 void Monitor::shift_list(int index) {
-    for (int i = size - 1; i > index; i--) {
+    for (int i = size; i > index; i--) {
         list[i] = list[i - 1];
     }
 }
 
 Car Monitor::get(unsigned int index) {
-    omp_set_lock(&lock);
-    if(size == 0) {
-        omp_unset_lock(&lock);
-        return Car();
+    Car *found_car;
+#pragma omp critical
+    {
+        if (size == 0) {
+            found_car = nullptr;
+        }
+
+        found_car = &list[index];
     }
 
-    Car foundCar = list[index];
-    omp_unset_lock(&lock);
-    return foundCar;
+    return (*found_car);
 }
 
 void Monitor::data_loading_finished() {
-    this->finished = true;
+    finished = true;
 }
 
 bool Monitor::is_loading_finished() {
     return this->finished;
+}
+
+Car *Monitor::pop() {
+    Car *car = nullptr;
+    while (size == 0 && !finished) {
+
+    }
+#pragma omp critical
+    {
+        if (size != 0) {
+            car = &list[size - 1];
+            size--;
+        }
+    }
+
+    return car;
 }
 
 #pragma clang diagnostic pop
