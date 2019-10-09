@@ -32,7 +32,7 @@ public:
 
     ~Monitor();
 
-    void add(Car &new_car);
+    void add(Car &new_car, bool sorted=false);
 
     Car get(unsigned int index);
 

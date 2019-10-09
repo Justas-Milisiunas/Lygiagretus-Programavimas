@@ -14,14 +14,14 @@ using namespace std::chrono;
 #define RESULT_FILE_PATH "//home//justas327//Github//Lygiagretus-Programavimas//LB-2//data//IFF-7_2_MilisiunasJ_L1_rez.txt"
 
 #define FILTER_CONDITION 50000
-#define NUMBER_OF_THREADS 8
+#define NUMBER_OF_THREADS 2
 #define WORK_ARRAY_SIZE 20
 
 void filterCars(Monitor &work_list, Monitor &result_list);
 
 void write_results_to_file(Monitor &cars, const string file_path, const string title);
 
-vector<Car> readCarsFile(string filePath);
+vector<Car> readCarsFile(const string& filePath);
 
 int main() {
     auto all_cars = readCarsFile(DATA_FILE_PATH);
@@ -39,7 +39,7 @@ int main() {
         // Main thread
         if (omp_get_thread_num() == 0) {
             for (Car &car: all_cars) {
-                work.add(car);
+                work.add(car, false);
             }
 
             work.data_loading_finished();
@@ -69,11 +69,11 @@ void filterCars(Monitor &work_list, Monitor &result_list) {
 
         int filter_number = current_car->getNumber();
         if (filter_number < FILTER_CONDITION)
-            result_list.add(*current_car);
+            result_list.add(*current_car, true);
     }
 }
 
-vector<Car> readCarsFile(string filePath) {
+vector<Car> readCarsFile(const string& filePath) {
     vector<Car> cars;
     ifstream stream(filePath);
     json allCarsJson = json::parse(stream);
