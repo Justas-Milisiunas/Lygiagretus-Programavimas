@@ -21,16 +21,20 @@ Monitor::~Monitor() {
     delete[] list;
 }
 
-void Monitor::add(Car &new_car) {
+void Monitor::add(Car &new_car, bool sorted) {
     while (this->size == capacity) {
     }
 #pragma omp critical
     {
         if (this->size != this->capacity) {
-            int index = find_index(new_car);
-            shift_list(index);
-            list[index] = new_car;
-            size++;
+            if(!sorted) {
+                list[size++] = new_car;
+            } else {
+                int index = find_index(new_car);
+                shift_list(index);
+                list[index] = new_car;
+                size++;
+            }
         }
     }
 }
