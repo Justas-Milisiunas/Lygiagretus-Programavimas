@@ -24,12 +24,15 @@ void write_results_to_file(Monitor &cars, const string file_path, const string t
 vector<Car> readCarsFile(const string& filePath);
 
 int main() {
+    // Reads cars data to vector
     auto all_cars = readCarsFile(DATA_FILE_PATH);
     int n = all_cars.size();
 
+    // Initializes work and results monitors
     Monitor work(WORK_ARRAY_SIZE);
     Monitor results(n);
 
+    // Current time in ms
     milliseconds before = duration_cast<milliseconds>(
             system_clock::now().time_since_epoch()
     );
@@ -39,7 +42,7 @@ int main() {
         // Main thread
         if (omp_get_thread_num() == 0) {
             for (Car &car: all_cars) {
-                work.add(car, false);
+                work.add(car);
             }
 
             work.data_loading_finished();
@@ -49,18 +52,26 @@ int main() {
         }
     }
 
+    // Current time in ms
     milliseconds after = duration_cast<milliseconds>(
             system_clock::now().time_since_epoch()
     );
 
+    // Shows filtering performance measured in ms
     cout << "Uztruko: " << to_string((after.count() - before.count())) << " Dydis: " << results.get_size() << endl;
 
+    // Write primary data and filtered data to file
     remove(RESULT_FILE_PATH);
     write_results_to_file(results, RESULT_FILE_PATH, "Pradiniai duomenys:");
     write_results_to_file(results, RESULT_FILE_PATH, "Rezultatas:");
     return 0;
 }
 
+/**
+ * Filters work monitor car objects
+ * @param work_list  Work monitor
+ * @param result_list  Filtered cars monitor
+ */
 void filterCars(Monitor &work_list, Monitor &result_list) {
     while (!work_list.is_loading_finished() || work_list.get_size() != 0) {
         Car *current_car = work_list.pop();
@@ -73,6 +84,11 @@ void filterCars(Monitor &work_list, Monitor &result_list) {
     }
 }
 
+/**
+ * Reads json data from file, serializes to Car objects and adds to vector
+ * @param filePath Data file path
+ * @return Vector with car objects
+ */
 vector<Car> readCarsFile(const string& filePath) {
     vector<Car> cars;
     ifstream stream(filePath);
@@ -87,6 +103,12 @@ vector<Car> readCarsFile(const string& filePath) {
     return cars;
 }
 
+/**
+ * Writes given monitor cars formatted in table to file
+ * @param cars Cars monitor
+ * @param file_path Result file path
+ * @param title Results table title
+ */
 void write_results_to_file(Monitor &cars, const string file_path, const string title) {
     ofstream file;
     file.open(file_path, ios_base::app);
