@@ -85,20 +85,20 @@ bool Monitor::is_loading_finished() {
     return this->finished;
 }
 
-Car *Monitor::pop() {
-    Car *car = nullptr;
+Car Monitor::pop() {
+    Car result;
     while (size == 0 && !finished) {
 
     }
 #pragma omp critical
     {
         if (size != 0) {
-            car = &list[size - 1];
+            result = list[size - 1];
             size--;
         }
     }
 
-    return car;
+    return result;
 }
 
 #pragma clang diagnostic pop

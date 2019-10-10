@@ -81,9 +81,8 @@ public:
 
     /**
      * Pops car object from the array end
-     * @return
      */
-    Car *pop();
+    Car pop();
 };
 
 

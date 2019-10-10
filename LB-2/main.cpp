@@ -14,14 +14,14 @@ using namespace std::chrono;
 #define RESULT_FILE_PATH "//home//justas327//Github//Lygiagretus-Programavimas//LB-2//data//IFF-7_2_MilisiunasJ_L1_rez.txt"
 
 #define FILTER_CONDITION 50000
-#define NUMBER_OF_THREADS 2
+#define NUMBER_OF_THREADS 50
 #define WORK_ARRAY_SIZE 20
 
 void filterCars(Monitor &work_list, Monitor &result_list);
 
 void write_results_to_file(Monitor &cars, const string file_path, const string title);
 
-vector<Car> readCarsFile(const string& filePath);
+vector<Car> readCarsFile(const string &filePath);
 
 int main() {
     // Reads cars data to vector
@@ -74,13 +74,16 @@ int main() {
  */
 void filterCars(Monitor &work_list, Monitor &result_list) {
     while (!work_list.is_loading_finished() || work_list.get_size() != 0) {
-        Car *current_car = work_list.pop();
-        if (current_car == nullptr)
+        Car current_car = work_list.pop();
+//        if (current_car == nullptr)
+//            continue;
+
+        if (current_car.getBrand().empty())
             continue;
 
-        int filter_number = current_car->getNumber();
+        int filter_number = current_car.getNumber();
         if (filter_number < FILTER_CONDITION)
-            result_list.add(*current_car, true);
+            result_list.add(current_car, true);
     }
 }
 
@@ -89,7 +92,7 @@ void filterCars(Monitor &work_list, Monitor &result_list) {
  * @param filePath Data file path
  * @return Vector with car objects
  */
-vector<Car> readCarsFile(const string& filePath) {
+vector<Car> readCarsFile(const string &filePath) {
     vector<Car> cars;
     ifstream stream(filePath);
     json allCarsJson = json::parse(stream);

@@ -41,3 +41,7 @@ int Car::getMakeYear() const {
 double Car::getMileage() const {
     return mileage;
 }
+
+Car::Car() {
+
+}

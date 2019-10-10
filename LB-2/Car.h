@@ -20,17 +20,19 @@ private:
     static int fib(int n);
 
 public:
+    Car();
+
     void fromJson(json data);
 
     int getNumber();
 
     string toJson();
 
-    const string &getBrand() const;
+    [[nodiscard]] const string &getBrand() const;
 
-    int getMakeYear() const;
+    [[nodiscard]] int getMakeYear() const;
 
-    double getMileage() const;
+    [[nodiscard]] double getMileage() const;
 };
 
 
