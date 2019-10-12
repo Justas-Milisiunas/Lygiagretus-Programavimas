@@ -1,0 +1,1 @@
+/usr/bin/c++   -std=c++11 -fopenmp -g   CMakeFiles/LD_1b.dir/main.cpp.o CMakeFiles/LD_1b.dir/Monitor.cpp.o CMakeFiles/LD_1b.dir/Car.cpp.o  -o LD_1b 

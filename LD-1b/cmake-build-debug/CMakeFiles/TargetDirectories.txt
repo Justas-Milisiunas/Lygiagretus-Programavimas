@@ -1,0 +1,3 @@
+/home/justas327/Github/Lygiagretus-Programavimas/LD-1b/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/justas327/Github/Lygiagretus-Programavimas/LD-1b/cmake-build-debug/CMakeFiles/LD_1b.dir
+/home/justas327/Github/Lygiagretus-Programavimas/LD-1b/cmake-build-debug/CMakeFiles/edit_cache.dir
