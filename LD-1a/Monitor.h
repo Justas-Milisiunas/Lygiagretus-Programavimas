@@ -7,6 +7,7 @@
 
 
 #include <condition_variable>
+#include <shared_mutex>
 #include "Car.h"
 
 class Monitor {
@@ -27,9 +28,10 @@ private:
     unsigned int size;
     unsigned int capacity;
 
-    mutex lock;
+    condition_variable cv;
+    mutex m;
 
-    volatile bool finished;
+    bool finished = false;
     Car *list;
 public:
     /**
@@ -48,7 +50,7 @@ public:
      * @param new_car New car
      * @param sorted true if array is sorted, false if not
      */
-    void add(Car &new_car, bool sorted=false);
+    void add(Car &new_car, bool sorted = false);
 
     /**
      * Returns car object by given index

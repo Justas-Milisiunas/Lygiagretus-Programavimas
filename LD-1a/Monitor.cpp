@@ -16,10 +16,12 @@ Monitor::~Monitor() {
 }
 
 void Monitor::add(Car &new_car, bool sorted) {
-    while (this->size == capacity) {
-    }
-    lock.lock();
     {
+        unique_lock<mutex> lock(m);
+        while (this->size == capacity) {
+            cv.wait(lock);
+        }
+
         if (this->size != this->capacity) {
             if (!sorted) {
                 list[size++] = new_car;
@@ -31,7 +33,8 @@ void Monitor::add(Car &new_car, bool sorted) {
             }
         }
     }
-    lock.unlock();
+
+    cv.notify_all();
 }
 
 unsigned int Monitor::get_size() {
@@ -60,14 +63,14 @@ void Monitor::shift_list(int index) {
 
 Car Monitor::get(unsigned int index) {
     Car *found_car;
-    lock.lock();
+    m.lock();
     if (size == 0) {
         found_car = nullptr;
     }
 
     found_car = &list[index];
 
-    lock.unlock();
+    m.unlock();
     return (*found_car);
 }
 
@@ -81,14 +84,18 @@ bool Monitor::is_loading_finished() {
 
 Car Monitor::pop() {
     Car result;
-    while (size == 0 && !finished) {
+    {
+        unique_lock<mutex> lock(m);
+        while (size == 0 && !finished) {
+            cv.wait(lock);
+        }
 
+        if (size != 0) {
+            result = list[size - 1];
+            size--;
+        }
     }
-    lock.lock();
-    if (size != 0) {
-        result = list[size - 1];
-        size--;
-    }
-    lock.unlock();
+
+    cv.notify_all();
     return result;
 }
