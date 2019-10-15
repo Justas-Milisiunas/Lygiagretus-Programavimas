@@ -10,7 +10,7 @@ using namespace std;
 using json = nlohmann::json;
 using namespace std::chrono;
 
-#define DATA_FILE_PATH "//home//justas327//Github//Lygiagretus-Programavimas//LD-1a//data//IFF-7_2_MilisiunasJ_L1_dat_2.json"
+#define DATA_FILE_PATH "//home//justas327//Github//Lygiagretus-Programavimas//LD-1a//data//IFF-7_2_MilisiunasJ_L1_dat_1.json"
 #define RESULT_FILE_PATH "//home//justas327//Github//Lygiagretus-Programavimas//LD-1a//data//IFF-7_2_MilisiunasJ_L1_rez.txt"
 
 #define FILTER_CONDITION 50000
