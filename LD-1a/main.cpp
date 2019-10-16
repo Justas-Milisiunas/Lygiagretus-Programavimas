@@ -10,12 +10,12 @@ using namespace std;
 using json = nlohmann::json;
 using namespace std::chrono;
 
-#define DATA_FILE_PATH "//home//justas327//Github//Lygiagretus-Programavimas//LD-1a//data//IFF-7_2_MilisiunasJ_L1_dat_1.json"
+#define DATA_FILE_PATH "//home//justas327//Github//Lygiagretus-Programavimas//LD-1a//data//IFF-7_2_MilisiunasJ_L1_dat_2.json"
 #define RESULT_FILE_PATH "//home//justas327//Github//Lygiagretus-Programavimas//LD-1a//data//IFF-7_2_MilisiunasJ_L1_rez.txt"
 
 #define FILTER_CONDITION 50000
-#define NUMBER_OF_THREADS 50
-#define WORK_ARRAY_SIZE 5000
+#define NUMBER_OF_THREADS 20
+#define WORK_ARRAY_SIZE 10
 
 void filterCars(Monitor &work_list, Monitor &result_list);
 
@@ -91,8 +91,9 @@ void filterCars(Monitor &work_list, Monitor &result_list) {
             continue;
 
         int filter_number = current_car.getNumber();
-        if (filter_number < FILTER_CONDITION)
+        if (filter_number < FILTER_CONDITION) {
             result_list.add(current_car, true);
+        }
     }
 }
 
