@@ -1,7 +1,7 @@
-package files
+package main
 
 type Car struct {
-	brand    string
-	makeYear int
-	mileage  float32
+	Brand    string
+	MakeYear int
+	Mileage  float32
 }

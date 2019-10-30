@@ -1,4 +1,4 @@
-package files
+package main
 
 import (
 	"encoding/json"
@@ -8,14 +8,24 @@ import (
 
 func main() {
 	filePath := "data/IFF-7_2_MilisiunasJ_L1_dat_1.json"
-	data := readData(filePath)
+	data := ReadData(filePath)
+	cars := ParseJsonData(data)
 
-	var cars []Car
-	json.Unmarshal([]byte(data), &cars)
-	print(cars)
+	print(cars[0].Brand)
+
 }
 
-func readData(filePath string) []byte {
+func ParseJsonData(jsonData []byte) []Car {
+	var cars []Car
+	err := json.Unmarshal([]byte(jsonData), &cars)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return cars
+}
+
+func ReadData(filePath string) []byte {
 	data, err := ioutil.ReadFile(filePath)
 	if err != nil {
 		log.Fatal(err)
