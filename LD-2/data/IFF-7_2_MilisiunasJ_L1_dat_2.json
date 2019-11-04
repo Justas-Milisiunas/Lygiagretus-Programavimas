@@ -1,5 +1,4 @@
-{
-  "cars": [
+[
     {
       "brand": "Porsche",
       "makeYear": 2010,
@@ -500,5 +499,4 @@
       "makeYear": 2014,
       "mileage": 30270.839
     }
-  ]
-}
+]
