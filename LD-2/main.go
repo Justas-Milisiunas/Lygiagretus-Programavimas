@@ -9,9 +9,9 @@ import (
 	"sync"
 )
 
-const filePath string = "data/IFF-7_2_MilisiunasJ_L1_dat_1.json"
+const filePath string = "data/IFF-7_2_MilisiunasJ_L1_dat_2.json"
 const filterCondition int = 50000
-const workersCount int = 4
+const workersCount int = 1000
 const bufferSize int = 5
 
 func main() {
@@ -51,10 +51,14 @@ func main() {
 	workers.Wait()
 	close(filtered)
 
-	//var filteredCars []Car
-	//for car := range results {
-	//	filteredCars = append(filteredCars, car)
-	//}
+	// Retrieves filtered cars from result goroutine
+	var filteredCars []Car
+	for car := range results {
+		filteredCars = append(filteredCars, car)
+		car.print()
+	}
+
+	fmt.Println(len(filteredCars))
 
 	group.Wait()
 }
@@ -65,8 +69,49 @@ func ResultsRoutine(filtered chan Car, resultsChan chan Car, group *sync.WaitGro
 	defer group.Done()
 
 	var results []Car
-	for car := range filtered {
-		results = append(results, car)
+	closedChannel := false
+
+	for {
+		var cases []reflect.SelectCase
+
+		if !closedChannel {
+			cases = append(cases, reflect.SelectCase{
+				Dir:  reflect.SelectRecv,
+				Chan: reflect.ValueOf(filtered),
+			})
+		} else {
+			cases = append(cases, reflect.SelectCase{
+				Dir:  reflect.SelectRecv,
+				Chan: reflect.ValueOf(nil),
+			})
+		}
+
+		if len(results) > 0 {
+			cases = append(cases, reflect.SelectCase{
+				Dir: reflect.SelectDefault,
+			})
+		}
+
+		// Loop exit condition
+		if !cases[0].Chan.IsValid() && len(cases) == 1 {
+			fmt.Println("Results routine isejimo pabaiga")
+			return
+		}
+
+		chosen, item, ok := reflect.Select(cases)
+		switch chosen {
+		case 0:
+			if !ok {
+				closedChannel = true
+			} else {
+				results = append(results, item.Interface().(Car))
+			}
+		default:
+			if closedChannel {
+				resultsChan <- results[0]
+				results = results[1:]
+			}
+		}
 	}
 
 	fmt.Println("Rezultatu isejimas:")
@@ -110,7 +155,7 @@ func DataWorkerRoutine(n int, main chan Car, dataChan chan Car, group *sync.Wait
 		var cases []reflect.SelectCase
 
 		// If data array is full deactivates channel from the main
-		if len(data) <= int(n / 2) && !channelClosed {
+		if len(data) <= int(n/2) && !channelClosed {
 			cases = append(cases, reflect.SelectCase{
 				Dir:  reflect.SelectRecv,
 				Chan: reflect.ValueOf(main),
