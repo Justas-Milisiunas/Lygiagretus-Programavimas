@@ -1,0 +1,502 @@
+[
+    {
+      "brand": "Porsche",
+      "makeYear": 2010,
+      "mileage": 146427.387
+    },
+    {
+      "brand": "Chevrolet",
+      "makeYear": 2010,
+      "mileage": 35566.921
+    },
+    {
+      "brand": "Mercedes-Benz",
+      "makeYear": 2012,
+      "mileage": 344558.191
+    },
+    {
+      "brand": "Chevrolet",
+      "makeYear": 2017,
+      "mileage": 51082.695
+    },
+    {
+      "brand": "Chevrolet",
+      "makeYear": 2015,
+      "mileage": 371087.911
+    },
+    {
+      "brand": "Nissan",
+      "makeYear": 2013,
+      "mileage": 268429.671
+    },
+    {
+      "brand": "GMC",
+      "makeYear": 2014,
+      "mileage": 30682.691
+    },
+    {
+      "brand": "GMC",
+      "makeYear": 2013,
+      "mileage": 148959.071
+    },
+    {
+      "brand": "Honda",
+      "makeYear": 2017,
+      "mileage": 280252.419
+    },
+    {
+      "brand": "Mitsubishi",
+      "makeYear": 2017,
+      "mileage": 229623.528
+    },
+    {
+      "brand": "Ford",
+      "makeYear": 2015,
+      "mileage": 294886.065
+    },
+    {
+      "brand": "Chevrolet",
+      "makeYear": 2016,
+      "mileage": 276393.984
+    },
+    {
+      "brand": "GMC",
+      "makeYear": 2018,
+      "mileage": 349375.582
+    },
+    {
+      "brand": "GMC",
+      "makeYear": 2016,
+      "mileage": 182622.894
+    },
+    {
+      "brand": "Rolls-Royce",
+      "makeYear": 2011,
+      "mileage": 227100.405
+    },
+    {
+      "brand": "Mazda",
+      "makeYear": 2019,
+      "mileage": 260200.465
+    },
+    {
+      "brand": "Maserati",
+      "makeYear": 2019,
+      "mileage": 195228.309
+    },
+    {
+      "brand": "Ford",
+      "makeYear": 2019,
+      "mileage": 237723.529
+    },
+    {
+      "brand": "Land Rover",
+      "makeYear": 2019,
+      "mileage": 91760.488
+    },
+    {
+      "brand": "Pontiac",
+      "makeYear": 2015,
+      "mileage": 114190.696
+    },
+    {
+      "brand": "Volvo",
+      "makeYear": 2011,
+      "mileage": 413319.307
+    },
+    {
+      "brand": "Chevrolet",
+      "makeYear": 2013,
+      "mileage": 195929.932
+    },
+    {
+      "brand": "Mazda",
+      "makeYear": 2012,
+      "mileage": 300975.0
+    },
+    {
+      "brand": "Mazda",
+      "makeYear": 2015,
+      "mileage": 217811.844
+    },
+    {
+      "brand": "Lincoln",
+      "makeYear": 2017,
+      "mileage": 419579.661
+    },
+    {
+      "brand": "Saturn",
+      "makeYear": 2014,
+      "mileage": 24640.136
+    },
+    {
+      "brand": "Mazda",
+      "makeYear": 2013,
+      "mileage": 336965.662
+    },
+    {
+      "brand": "Ford",
+      "makeYear": 2019,
+      "mileage": 253777.843
+    },
+    {
+      "brand": "Hyundai",
+      "makeYear": 2010,
+      "mileage": 474354.376
+    },
+    {
+      "brand": "BMW",
+      "makeYear": 2017,
+      "mileage": 307232.035
+    },
+    {
+      "brand": "Dodge",
+      "makeYear": 2018,
+      "mileage": 10515.401
+    },
+    {
+      "brand": "Mercedes-Benz",
+      "makeYear": 2017,
+      "mileage": 440400.025
+    },
+    {
+      "brand": "Volvo",
+      "makeYear": 2013,
+      "mileage": 90485.335
+    },
+    {
+      "brand": "Ford",
+      "makeYear": 2013,
+      "mileage": 358739.481
+    },
+    {
+      "brand": "Volkswagen",
+      "makeYear": 2010,
+      "mileage": 380678.708
+    },
+    {
+      "brand": "Mazda",
+      "makeYear": 2016,
+      "mileage": 357117.877
+    },
+    {
+      "brand": "Land Rover",
+      "makeYear": 2010,
+      "mileage": 392244.148
+    },
+    {
+      "brand": "Ford",
+      "makeYear": 2016,
+      "mileage": 121759.182
+    },
+    {
+      "brand": "Lexus",
+      "makeYear": 2012,
+      "mileage": 241113.034
+    },
+    {
+      "brand": "Infiniti",
+      "makeYear": 2010,
+      "mileage": 432056.845
+    },
+    {
+      "brand": "Mitsubishi",
+      "makeYear": 2013,
+      "mileage": 437427.235
+    },
+    {
+      "brand": "Audi",
+      "makeYear": 2014,
+      "mileage": 383976.067
+    },
+    {
+      "brand": "Chrysler",
+      "makeYear": 2018,
+      "mileage": 441560.683
+    },
+    {
+      "brand": "Toyota",
+      "makeYear": 2016,
+      "mileage": 332894.32
+    },
+    {
+      "brand": "Suzuki",
+      "makeYear": 2013,
+      "mileage": 316755.367
+    },
+    {
+      "brand": "Volkswagen",
+      "makeYear": 2017,
+      "mileage": 311942.994
+    },
+    {
+      "brand": "Chevrolet",
+      "makeYear": 2010,
+      "mileage": 45750.56
+    },
+    {
+      "brand": "Toyota",
+      "makeYear": 2014,
+      "mileage": 72495.528
+    },
+    {
+      "brand": "Kia",
+      "makeYear": 2016,
+      "mileage": 363767.314
+    },
+    {
+      "brand": "Infiniti",
+      "makeYear": 2010,
+      "mileage": 449345.889
+    },
+    {
+      "brand": "Ford",
+      "makeYear": 2011,
+      "mileage": 110886.441
+    },
+    {
+      "brand": "Ford",
+      "makeYear": 2011,
+      "mileage": 117277.071
+    },
+    {
+      "brand": "Ford",
+      "makeYear": 2010,
+      "mileage": 466663.26
+    },
+    {
+      "brand": "Mercedes-Benz",
+      "makeYear": 2013,
+      "mileage": 191487.438
+    },
+    {
+      "brand": "BMW",
+      "makeYear": 2012,
+      "mileage": 370770.129
+    },
+    {
+      "brand": "BMW",
+      "makeYear": 2018,
+      "mileage": 246787.586
+    },
+    {
+      "brand": "Chevrolet",
+      "makeYear": 2014,
+      "mileage": 385273.683
+    },
+    {
+      "brand": "Chevrolet",
+      "makeYear": 2011,
+      "mileage": 81651.155
+    },
+    {
+      "brand": "Nissan",
+      "makeYear": 2015,
+      "mileage": 323698.301
+    },
+    {
+      "brand": "Chevrolet",
+      "makeYear": 2013,
+      "mileage": 438206.196
+    },
+    {
+      "brand": "Toyota",
+      "makeYear": 2018,
+      "mileage": 281780.902
+    },
+    {
+      "brand": "Jaguar",
+      "makeYear": 2013,
+      "mileage": 400960.097
+    },
+    {
+      "brand": "Dodge",
+      "makeYear": 2016,
+      "mileage": 142091.273
+    },
+    {
+      "brand": "Volkswagen",
+      "makeYear": 2010,
+      "mileage": 193326.841
+    },
+    {
+      "brand": "Toyota",
+      "makeYear": 2018,
+      "mileage": 299553.712
+    },
+    {
+      "brand": "Land Rover",
+      "makeYear": 2015,
+      "mileage": 180341.557
+    },
+    {
+      "brand": "BMW",
+      "makeYear": 2018,
+      "mileage": 446958.771
+    },
+    {
+      "brand": "Suzuki",
+      "makeYear": 2014,
+      "mileage": 342440.265
+    },
+    {
+      "brand": "Toyota",
+      "makeYear": 2019,
+      "mileage": 469215.478
+    },
+    {
+      "brand": "Ford",
+      "makeYear": 2018,
+      "mileage": 306722.27
+    },
+    {
+      "brand": "Dodge",
+      "makeYear": 2014,
+      "mileage": 493711.854
+    },
+    {
+      "brand": "Audi",
+      "makeYear": 2016,
+      "mileage": 83773.019
+    },
+    {
+      "brand": "Cadillac",
+      "makeYear": 2014,
+      "mileage": 404168.464
+    },
+    {
+      "brand": "Dodge",
+      "makeYear": 2011,
+      "mileage": 324118.951
+    },
+    {
+      "brand": "Ford",
+      "makeYear": 2010,
+      "mileage": 172439.699
+    },
+    {
+      "brand": "Ford",
+      "makeYear": 2013,
+      "mileage": 202040.566
+    },
+    {
+      "brand": "Isuzu",
+      "makeYear": 2019,
+      "mileage": 71089.111
+    },
+    {
+      "brand": "Plymouth",
+      "makeYear": 2016,
+      "mileage": 28847.5
+    },
+    {
+      "brand": "Cadillac",
+      "makeYear": 2010,
+      "mileage": 305847.369
+    },
+    {
+      "brand": "Maserati",
+      "makeYear": 2010,
+      "mileage": 278257.689
+    },
+    {
+      "brand": "Pontiac",
+      "makeYear": 2017,
+      "mileage": 443275.115
+    },
+    {
+      "brand": "Toyota",
+      "makeYear": 2019,
+      "mileage": 80504.338
+    },
+    {
+      "brand": "Bentley",
+      "makeYear": 2019,
+      "mileage": 216174.055
+    },
+    {
+      "brand": "Suzuki",
+      "makeYear": 2019,
+      "mileage": 116579.963
+    },
+    {
+      "brand": "Nissan",
+      "makeYear": 2017,
+      "mileage": 343642.027
+    },
+    {
+      "brand": "Acura",
+      "makeYear": 2018,
+      "mileage": 116629.155
+    },
+    {
+      "brand": "Mitsubishi",
+      "makeYear": 2013,
+      "mileage": 59328.539
+    },
+    {
+      "brand": "Dodge",
+      "makeYear": 2012,
+      "mileage": 439554.967
+    },
+    {
+      "brand": "Isuzu",
+      "makeYear": 2011,
+      "mileage": 385888.728
+    },
+    {
+      "brand": "Cadillac",
+      "makeYear": 2018,
+      "mileage": 484447.224
+    },
+    {
+      "brand": "Mercury",
+      "makeYear": 2013,
+      "mileage": 470384.275
+    },
+    {
+      "brand": "Land Rover",
+      "makeYear": 2014,
+      "mileage": 106548.187
+    },
+    {
+      "brand": "Volkswagen",
+      "makeYear": 2015,
+      "mileage": 75853.129
+    },
+    {
+      "brand": "Ford",
+      "makeYear": 2011,
+      "mileage": 168404.791
+    },
+    {
+      "brand": "Subaru",
+      "makeYear": 2017,
+      "mileage": 229687.849
+    },
+    {
+      "brand": "Acura",
+      "makeYear": 2012,
+      "mileage": 75537.384
+    },
+    {
+      "brand": "Rolls-Royce",
+      "makeYear": 2012,
+      "mileage": 192821.579
+    },
+    {
+      "brand": "Bentley",
+      "makeYear": 2016,
+      "mileage": 432461.947
+    },
+    {
+      "brand": "Ford",
+      "makeYear": 2011,
+      "mileage": 128698.11
+    },
+    {
+      "brand": "Lincoln",
+      "makeYear": 2014,
+      "mileage": 30270.839
+    }
+]
