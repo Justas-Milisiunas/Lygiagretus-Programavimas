@@ -1,18 +1,26 @@
 package main
 
 import (
+	"bufio"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 	"reflect"
+	"sort"
+	"strings"
 	"sync"
+	"time"
 )
 
 const filePath string = "data/IFF-7_2_MilisiunasJ_L1_dat_2.json"
+const resultsFilePath string = "data/IFF-7_2_MilisiunasJ_L1_rez.txt"
+
 const filterCondition int = 50000
-const workersCount int = 1000
-const bufferSize int = 5
+const workersCount int = 4
+
+//const bufferSize int = 5
 
 func main() {
 	// Reads json data and parses it to Car array type
@@ -29,6 +37,8 @@ func main() {
 	dataChan := make(chan Car)
 	filtered := make(chan Car)
 	results := make(chan Car)
+
+	start := time.Now()
 
 	// Starts data array and results array management goroutines
 	group.Add(2)
@@ -55,12 +65,13 @@ func main() {
 	var filteredCars []Car
 	for car := range results {
 		filteredCars = append(filteredCars, car)
-		car.print()
 	}
 
-	fmt.Println(len(filteredCars))
-
+	fmt.Println("Elapsed time:", time.Since(start))
+	fmt.Printf("Filtered cars array size: %d", len(filteredCars))
 	group.Wait()
+
+	WriteResultsToFile(cars, filteredCars)
 }
 
 //ResultsRoutine Manages results array and send data to the main goroutine
@@ -94,7 +105,6 @@ func ResultsRoutine(filtered chan Car, resultsChan chan Car, group *sync.WaitGro
 
 		// Loop exit condition
 		if !cases[0].Chan.IsValid() && len(cases) == 1 {
-			fmt.Println("Results routine isejimo pabaiga")
 			return
 		}
 
@@ -113,13 +123,6 @@ func ResultsRoutine(filtered chan Car, resultsChan chan Car, group *sync.WaitGro
 			}
 		}
 	}
-
-	fmt.Println("Rezultatu isejimas:")
-	for _, item := range results {
-		item.print()
-	}
-	fmt.Println("Rezultatu isejimo pabaiga")
-
 }
 
 //WorkerRoutine Filters given data and sends it to the results goroutine
@@ -134,13 +137,6 @@ func WorkerRoutine(dataChan chan Car, filtered chan Car, group *sync.WaitGroup) 
 			filtered <- car
 		}
 	}
-
-	fmt.Println("Worker isejimas:")
-	for _, item := range cars {
-		item.print()
-	}
-
-	fmt.Println("Worker isejimo pabaiga")
 }
 
 //DataWorkerRoutine Manages given data from the main and sends it to the workers
@@ -176,12 +172,6 @@ func DataWorkerRoutine(n int, main chan Car, dataChan chan Car, group *sync.Wait
 
 		// Loop exit condition
 		if !cases[0].Chan.IsValid() && len(cases) == 1 {
-			fmt.Println("Data worker isejimas:")
-			for _, item := range data {
-				item.print()
-			}
-
-			fmt.Println("Data worker isejimas baigtas")
 			return
 		}
 
@@ -220,4 +210,45 @@ func ReadData(filePath string) []byte {
 	}
 
 	return data
+}
+
+//WriteResultsToFile Writes original data and results data to the given results file in table format
+func WriteResultsToFile(originalData []Car, results []Car) {
+	file, err := os.OpenFile(resultsFilePath, os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		fmt.Printf("Failed writing to file %s", err)
+	}
+
+	dataWriter := bufio.NewWriter(file)
+
+	// Table header row
+	_, _ = dataWriter.WriteString(fmt.Sprintf("%55v\n", "Pradiniai duomenys"))
+	_, _ = dataWriter.WriteString(strings.Repeat("-", 84) + "\n")
+	_, _ = dataWriter.WriteString(fmt.Sprintf("|%20v|%20v|%20v|%20v|\n", "Gamintojas", "Pagaminimo metai",
+		"Rida", "Filtravimo numeris"))
+	_, _ = dataWriter.WriteString(strings.Repeat("-", 84) + "\n")
+
+	for _, car := range originalData {
+		_, _ = dataWriter.WriteString(car.toString() + "\n")
+	}
+
+	sort.Slice(results, func(i, j int) bool {
+		return results[i].getNumber() < results[j].getNumber()
+	})
+
+	// Table header row
+	_, _ = dataWriter.WriteString(fmt.Sprintf("\n\n%48v\n", "Rezultatas"))
+	_, _ = dataWriter.WriteString(strings.Repeat("-", 84) + "\n")
+	_, _ = dataWriter.WriteString(fmt.Sprintf("|%20v|%20v|%20v|%20v|\n", "Gamintojas", "Pagaminimo metai",
+		"Rida", "Filtravimo numeris"))
+	_, _ = dataWriter.WriteString(strings.Repeat("-", 84) + "\n")
+
+	for _, car := range results {
+		_, _ = dataWriter.WriteString(car.toString() + "\n")
+	}
+
+	_, _ = dataWriter.WriteString(fmt.Sprintf("Is viso masinu: %v", len(results)))
+
+	_ = dataWriter.Flush()
+	_ = file.Close()
 }

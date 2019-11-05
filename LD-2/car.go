@@ -8,8 +8,9 @@ type Car struct {
 	Mileage  float32
 }
 
-func (c *Car) print() {
-	fmt.Printf("%s %d %f\n", c.Brand, c.MakeYear, c.Mileage)
+func (c *Car) toString() string {
+	//fmt.Printf("%s %d %f\n", c.Brand, c.MakeYear, c.Mileage)
+	return fmt.Sprintf("|%20v|%20v|%20v|%20v|", c.Brand, c.MakeYear, c.Mileage, c.getNumber())
 }
 
 func (c *Car) getNumber() int {
