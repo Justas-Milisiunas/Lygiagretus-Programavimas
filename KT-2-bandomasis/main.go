@@ -6,29 +6,35 @@ import (
 )
 
 func main() {
-	// TODO: use one channel for workers
 	group := sync.WaitGroup{}
-	workerChan1 := make(chan int)
-	workerChan2 := make(chan int)
+	workers := sync.WaitGroup{}
+
+	data := make(chan int)
 	printer1 := make(chan int)
 	printer2 := make(chan int)
 	finish := make(chan int)
 
-	group.Add(5)
-	go worker(0, workerChan1, finish, &group)
-	go worker(11, workerChan2, finish, &group)
+	workers.Add(2)
+	group.Add(3)
 
-	go receiver(workerChan1, workerChan2, printer1, printer2, finish, &group)
+	// Starts workers
+	go worker(0, data, finish, &workers)
+	go worker(11, data, finish, &workers)
 
-	go printer(printer1, &group)
-	go printer(printer2, &group)
+	// Starts receiver
+	go receiver(data, printer1, printer2, finish, &group)
 
+	// Starts printers
+	go printer(printer1, &group, &workers)
+	go printer(printer2, &group, &workers)
+
+	// Waits until each go routine job is one
 	group.Wait()
 }
 
-func worker(startIndex int, data chan int, finish <-chan int, group *sync.WaitGroup) {
-	defer close(data)
-	defer group.Done()
+// Prints numbers from given start index until signal from the finish channel
+func worker(startIndex int, data chan int, finish <-chan int, workers *sync.WaitGroup) {
+	defer workers.Done()
 
 	for i := startIndex; ; i++ {
 		select {
@@ -39,7 +45,8 @@ func worker(startIndex int, data chan int, finish <-chan int, group *sync.WaitGr
 	}
 }
 
-func receiver(worker1 chan int, worker2 chan int, printer1 chan int, printer2 chan int, finish chan<- int, group *sync.WaitGroup) {
+// Receives numbers from workers, filters them for the print channels
+func receiver(data chan int, printer1 chan int, printer2 chan int, finish chan<- int, group *sync.WaitGroup) {
 	defer close(printer1)
 	defer close(printer2)
 	defer close(finish)
@@ -47,33 +54,30 @@ func receiver(worker1 chan int, worker2 chan int, printer1 chan int, printer2 ch
 
 	counter := 0
 	for {
-		select {
-		case item := <-worker1:
-			if item%2 == 0 {
-				printer1 <- item
-			} else {
-				printer2 <- item
-			}
+		item := <-data
+		if item%2 == 0 {
+			printer1 <- item
 			counter++
-		case item := <-worker2:
-			if item%2 == 0 {
-				printer1 <- item
-			} else {
-				printer2 <- item
-			}
+		} else {
+			printer2 <- item
 			counter++
 		}
 
 		if counter >= 20 {
-			return
+			break
 		}
 	}
 }
 
-func printer(data <-chan int, group *sync.WaitGroup) {
+// Prints number from the data channel
+func printer(data <-chan int, group *sync.WaitGroup, workers *sync.WaitGroup) {
 	defer group.Done()
 
+	var results []int
 	for item := range data {
-		fmt.Println(item)
+		results = append(results, item)
 	}
+
+	workers.Wait()
+	fmt.Println(results)
 }
