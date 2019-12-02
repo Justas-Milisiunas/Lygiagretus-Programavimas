@@ -1,5 +1,10 @@
 import copy
+import multiprocessing
 import random
+import time
+from functools import partial
+from multiprocessing.pool import Pool
+
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -10,14 +15,16 @@ alpha = 0.1
 # h value from formula
 h = 1e-6
 # Number of points
-n = 2
+n = 5
 # Generated points range min
 range_min = -10
 range_max = 10
 # Generated points seed
-seed = 100
+seed = 5
 # Required precision to end optimization earlier
 eps = 1e-6
+# Processes count
+processes = 8
 
 
 def generate_points():
@@ -106,17 +113,17 @@ def points_gradient_vector(points, current_sum):
     :return:
     """
     gradients = [0.0, 0.0]
-    for i in range(1, len(points)):
-        temp_x = point_gradient(i, 0, points, current_sum)
-        temp_y = point_gradient(i, 1, points, current_sum)
+    # Gives work to workers pool
+    args = partial(point_gradient, points=points, current_sum=current_sum)
+    result = pool.map(args, range(1, len(points)))
 
-        gradients.append(temp_x)
-        gradients.append(temp_y)
+    # Converts 2d array to 1d
+    [gradients.extend(point) for point in result]
 
     return gradients
 
 
-def point_gradient(i, j, points, current_sum):
+def point_gradient(i, points, current_sum):
     """
     Calculates point given by i and j gradient
     :param i: point index in array
@@ -125,10 +132,15 @@ def point_gradient(i, j, points, current_sum):
     :param current_sum: current value between each strings
     :return: gradient for given point
     """
-    changed_points = copy.deepcopy(points)
-    changed_points[i][j] += h
+    # Point's x
+    changed_points_x = copy.deepcopy(points)
+    changed_points_x[i][0] += h
 
-    return (distance_sum(changed_points) - current_sum) / h
+    # Point's y
+    changed_points_y = copy.deepcopy(points)
+    changed_points_y[i][1] += h
+
+    return [(distance_sum(changed_points_x) - current_sum) / h, (distance_sum(changed_points_y) - current_sum) / h]
 
 
 def connect_each_point(points):
@@ -146,17 +158,26 @@ def connect_each_point(points):
     return connected
 
 
-generated_points = generate_points()
-optimized_points, sum_value, iterations_count = optimize_points(generated_points)
-print(f"Reached precision: {sum_value} Iterations: {iterations_count} Points: {optimized_points}")
+# Creates workers pool
+pool = Pool(processes=processes)
 
+# Generates points
+generated_points = generate_points()
+
+# Optimizes points location, measures execution time
+start = time.time()
+optimized_points, sum_value, iterations_count = optimize_points(generated_points)
+end = time.time()
+
+# Prints results
+print(f"Reached precision: {sum_value} Iterations: {iterations_count} Points: {optimized_points}")
+print(f"Calculated in: {end - start}s")
 connected_points = connect_each_point(optimized_points)
 
+# Shows primary points data, optimised points, each dot connected graphs
 plt.scatter([x[0] for x in generated_points], [x[1] for x in generated_points], color='b', label='Starting points')
 plt.scatter([x[0] for x in optimized_points], [x[1] for x in optimized_points], color='r', label='Optimized points')
 plt.plot([x[0] for x in connected_points], [x[1] for x in connected_points], color='g', label='Optimized points lines')
 
-# plt.ylim([-10, 10])
-# plt.xlim([-10, 10])
 plt.legend()
 plt.show()
