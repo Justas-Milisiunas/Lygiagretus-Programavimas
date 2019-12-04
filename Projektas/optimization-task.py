@@ -15,26 +15,26 @@ alpha = 0.1
 # h value from formula
 h = 1e-6
 # Number of points
-n = 5
+n = 10
 # Generated points range min
 range_min = -10
 range_max = 10
 # Generated points seed
 seed = 5
 # Required precision to end optimization earlier
-eps = 1e-6
+eps = 1e-2
 # Processes count
 processes = 8
 
 
-def generate_points():
+def generate_points(_n):
     """
     Generates n amount of points in range from min to max by given seed
     :return: generated points array
     """
     points = [[0.0, 0.0]]
     random.seed(seed)
-    for i in range(n):
+    for i in range(_n):
         x = random.uniform(range_min, range_max)
         y = random.uniform(range_min, range_max)
         points.append([x, y])
@@ -77,8 +77,10 @@ def optimize_points(points):
 
     max_iterations = 10000
     current_sum = distance_sum(points)
+    primary_sum = current_sum.copy()
     counter = 0
-    while counter < max_iterations and alpha >= eps:
+    not_improving_counter = 0
+    while counter < max_iterations and alpha >= eps and not_improving_counter <= 10:
         counter += 1
 
         points_gradient = points_gradient_vector(points, current_sum)
@@ -89,10 +91,12 @@ def optimize_points(points):
         if next_sum < current_sum:
             points = moved_points
             current_sum = next_sum
+            not_improving_counter = 0
         else:
             alpha /= 2
+            not_improving_counter += 1
 
-    return points, current_sum, counter + 1
+    return points, current_sum, counter + 1, primary_sum
 
 
 def move_by_gradient(gradient_vector, points):
@@ -157,20 +161,19 @@ def connect_each_point(points):
 
     return connected
 
-
 # Creates workers pool
 pool = Pool(processes=processes)
 
 # Generates points
-generated_points = generate_points()
+generated_points = generate_points(n)
 
 # Optimizes points location, measures execution time
 start = time.time()
-optimized_points, sum_value, iterations_count = optimize_points(generated_points)
+optimized_points, sum_value, iterations_count, primary_sum = optimize_points(generated_points)
 end = time.time()
 
 # Prints results
-print(f"Reached precision: {sum_value} Iterations: {iterations_count} Points: {optimized_points}")
+print(f"Primary strings lengths average: {primary_sum}\n Optimization price: {sum_value}\n Iterations: {iterations_count}\n Points: {optimized_points}")
 print(f"Calculated in: {end - start}s")
 connected_points = connect_each_point(optimized_points)
 
