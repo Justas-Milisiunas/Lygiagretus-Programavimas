@@ -173,7 +173,7 @@ optimized_points, sum_value, iterations_count, primary_sum = optimize_points(gen
 end = time.time()
 
 # Prints results
-print(f"Primary strings lengths average: {primary_sum} Optimization price: {sum_value} Iterations: {iterations_count} Points: {optimized_points}")
+print(f"Primary strings lengths average: {primary_sum}\n Optimization price: {sum_value}\n Iterations: {iterations_count}\n Points: {optimized_points}")
 print(f"Calculated in: {end - start}s")
 connected_points = connect_each_point(optimized_points)
 
