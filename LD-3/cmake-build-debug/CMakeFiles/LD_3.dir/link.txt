@@ -1,0 +1,1 @@
+/usr/bin/c++  -g   CMakeFiles/LD_3.dir/temp.cpp.o  -o LD_3 
