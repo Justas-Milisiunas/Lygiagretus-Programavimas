@@ -28,12 +28,11 @@ struct Car {
 
 void readCarsFile(vector<Car> *cars);
 __global__ void sum_on_gpu(Car* cars, int* n, int* chunk_size, Car* results);
-__device__ void sum_chunk(Car* cars, int* n, int* start_index, int* end_index, Car* results, int* thread_index);
 __device__ void gpu_memset(char* dest);
 __device__ void gpu_strcat(char* dest, char* src);
 
 int main() {
-    int threads_count = 5;
+    int threads_count = 10;
     vector<Car> all_cars;
     readCarsFile(&all_cars);
 
@@ -61,7 +60,7 @@ int main() {
     cudaMemcpy(d_n, &n, sizeof(int), cudaMemcpyHostToDevice);
     cudaMemcpy(d_chunk_size, &chunk_size, sizeof(int), cudaMemcpyHostToDevice);
 
-    sum_on_gpu<<<1,1>>>(d_all_cars, d_n, d_chunk_size, d_results);
+    sum_on_gpu<<<1,threads_count>>>(d_all_cars, d_n, d_chunk_size, d_results);
     cudaDeviceSynchronize();
     cout << "Finished" << endl;
     return 0;
@@ -70,6 +69,10 @@ int main() {
 __global__ void sum_on_gpu(Car* cars, int* n, int* chunk_size, Car* results) {
     int start_index = threadIdx.x * *chunk_size;
     int end_index = min(start_index + 5, *n);
+
+    if (end_index + *chunk_size >= *n) {
+        end_index = *n;
+    }
 
     Car sum;
     gpu_memset(sum.brand);
@@ -85,27 +88,8 @@ __global__ void sum_on_gpu(Car* cars, int* n, int* chunk_size, Car* results) {
     }
 
     printf("Thread: %d Start Index: %d End Index: %d\n", threadIdx.x, start_index, end_index);
-    results[threadIdx.x] = &sum;
-    printf("RESULT Brand: %s Make Year: %d Mileage: %f\n", result[threadIdx.x].brand, result[threadIdx.x].make_year, result[threadIdx.x].mileage);
-}
-
-__device__ void sum_chunk(Car* cars, int* n, int* start_index, int* end_index, Car* results, int* thread_index) {
-    Car sum;
-    gpu_memset(sum.brand);
-    sum.make_year = 0;
-    sum.mileage = 0.0;
-
-    for (int i = *start_index; i < *end_index; ++i) {
-        if (i < *n) {
-            gpu_strcat(sum.brand, cars[i].brand);
-            sum.make_year += cars[i].make_year;
-            sum.mileage += cars[i].mileage;
-        }
-    }
-
-    printf("SUM Brand: %s Make Year: %d Mileage: %f\n", sum.brand, sum.make_year, sum.mileage);
-    results[thread_index] = &sum;
-    printf("RESULT Brand: %s Make Year: %d Mileage: %f\n", result[thread_index].brand, result[thread_index].make_year, result[thread_index].mileage);
+    results[threadIdx.x] = sum;
+    printf("RESULT Brand: %s Make Year: %d Mileage: %f\n", results[threadIdx.x].brand, results[threadIdx.x].make_year, results[threadIdx.x].mileage);
 }
 
 __device__ void gpu_strcat(char* dest, char* src) {
