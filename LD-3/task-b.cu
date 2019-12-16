@@ -12,7 +12,7 @@ using namespace thrust;
 
 const int MAX_STRING_LENGTH = 256;
 #define DATA_FILE "//home//justmili//data//IFF-7_2_MilisiunasJ_L1_dat_1.json"
-#define RESULTS_FILE "//home//justmili//data//IFF-7_2_MilisiunasJ_L3_results_b.json"
+#define RESULTS_FILE "//home//justmili//data//b.json"
 
 struct Car {
     char brand[MAX_STRING_LENGTH];
@@ -26,6 +26,10 @@ struct Car {
 
         make_year = data["makeYear"];
         mileage = data["mileage"];
+    }
+
+    void print() {
+        printf("Brand: %s Make Year: %d Mileage: %f\n", brand, make_year, mileage);
     }
 };
 
@@ -52,7 +56,6 @@ int main() {
     host_vector<Car> host_cars = reads_cars_file(DATA_FILE);
     device_vector<Car> device_cars = host_cars;
 
-    device_vector<Car> filtered_cars(device_cars.size());
     Car sum;
     memset(sum.brand, 0, sizeof(sum.brand));
     sum.make_year = 0;
@@ -60,7 +63,7 @@ int main() {
 
     Car result = reduce(device_cars.begin(), device_cars.end(), sum, sum_func());
 
-    printf("Calculations finished!\n");
+    printf("\nSusumuotos masinos\n");
     printf("Brand: %s Make Year: %d Mileage: %f\n", result.brand, result.make_year, result.mileage);
     write_results_to_file(result, RESULTS_FILE, "B dalies rezultatai");
     return 0;
@@ -106,9 +109,11 @@ host_vector<Car> reads_cars_file(const string file_path) {
     json allCarsJson = json::parse(stream);
     auto allCars = allCarsJson["cars"];
 
+    printf("Pradiniai duomenys:\n");
     for (const json &new_car: allCars) {
         Car tempCar;
         tempCar.from_json(new_car);
+        tempCar.print();
         cars.push_back(tempCar);
     }
 
@@ -123,7 +128,7 @@ host_vector<Car> reads_cars_file(const string file_path) {
  */
 void write_results_to_file(Car result, const string file_path, const string title) {
     ofstream file;
-    file.open(file_path, ios_base::app);
+    file.open(file_path);
     string str(result.brand);
 
     file << setw(70) << title << endl;

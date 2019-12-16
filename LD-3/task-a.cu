@@ -11,8 +11,9 @@ using namespace std;
 using json = nlohmann::json;
 
 const int MAX_STRING_LENGTH = 256;
+const int THREADS = 3;
 #define DATA_FILE "//home//justmili//data//IFF-7_2_MilisiunasJ_L1_dat_1.json"
-#define RESULTS_FILE "//home//justmili//data//IFF-7_2_MilisiunasJ_L3_results.json"
+#define RESULTS_FILE "//home//justmili//data//a.json"
 
 struct Car {
     char brand[MAX_STRING_LENGTH];
@@ -27,6 +28,10 @@ struct Car {
         make_year = data["makeYear"];
         mileage = data["mileage"];
     }
+
+    void print() {
+        printf("Brand: %s Make Year: %d Mileage: %f\n", brand, make_year, mileage);
+    }
 };
 
 void readCarsFile(vector<Car> *cars);
@@ -37,15 +42,14 @@ __device__ void gpu_memset(char* dest);
 __device__ void gpu_strcat(char* dest, char* src);
 
 int main() {
-    int threads_count = 10;
     vector<Car> all_cars;
     readCarsFile(&all_cars);
 
     // Host
     Car* cars = &all_cars[0];
-    Car results[threads_count];
+    Car results[THREADS];
     int n = all_cars.size();
-    int chunk_size = n / threads_count;
+    int chunk_size = n / THREADS;
 
     // GPU
     Car* d_all_cars;
@@ -53,11 +57,9 @@ int main() {
     int* d_chunk_size;
     Car* d_results;
 
-    cout << cars[0].brand;
-
     // Memory allocation for GPU
     cudaMalloc((void**)&d_all_cars, n * sizeof(Car));
-    cudaMalloc((void**)&d_results, threads_count * sizeof(Car));
+    cudaMalloc((void**)&d_results, THREADS * sizeof(Car));
     cudaMalloc((void**)&d_n, sizeof(int));
     cudaMalloc((void**)&d_chunk_size, sizeof(int));
 
@@ -66,19 +68,18 @@ int main() {
     cudaMemcpy(d_n, &n, sizeof(int), cudaMemcpyHostToDevice);
     cudaMemcpy(d_chunk_size, &chunk_size, sizeof(int), cudaMemcpyHostToDevice);
 
-    sum_on_gpu<<<1,threads_count>>>(d_all_cars, d_n, d_chunk_size, d_results);
+    sum_on_gpu<<<1,THREADS>>>(d_all_cars, d_n, d_chunk_size, d_results);
+    printf("\nKiekvienos gijos susumuoti duomenys:\n");
     cudaDeviceSynchronize();
 
-    cudaMemcpy(&results, d_results, threads_count * sizeof(Car), cudaMemcpyDeviceToHost);
+    cudaMemcpy(&results, d_results, THREADS * sizeof(Car), cudaMemcpyDeviceToHost);
     cudaFree(d_all_cars);
     cudaFree(d_n);
     cudaFree(d_chunk_size);
     cudaFree(d_results);
 
-    printf("CPU Brand: %s Make Year: %d Mileage: %f\n", results[0].brand, results[0].make_year, results[0].mileage);
     cout << "Finished" << endl;
-
-    write_results_to_file(results, threads_count, RESULTS_FILE, "A dalies rezultatai");
+    write_results_to_file(results, THREADS, RESULTS_FILE, "A dalies rezultatai");
     return 0;
 }
 
@@ -92,9 +93,9 @@ int main() {
  */
 __global__ void sum_on_gpu(Car* cars, int* n, int* chunk_size, Car* results) {
     int start_index = threadIdx.x * *chunk_size;
-    int end_index = min(start_index + 5, *n);
+    int end_index = min(start_index + *chunk_size, *n);
 
-    if (end_index + *chunk_size >= *n) {
+    if (end_index + *chunk_size >= *n || threadIdx.x + 1 == THREADS) {
         end_index = *n;
     }
 
@@ -111,9 +112,9 @@ __global__ void sum_on_gpu(Car* cars, int* n, int* chunk_size, Car* results) {
         }
     }
 
-    printf("Thread: %d Start Index: %d End Index: %d\n", threadIdx.x, start_index, end_index);
+//    printf("Thread: %d Start Index: %d End Index: %d\n", threadIdx.x, start_index, end_index);
     results[threadIdx.x] = sum;
-    printf("RESULT Brand: %s Make Year: %d Mileage: %f\n", results[threadIdx.x].brand, results[threadIdx.x].make_year, results[threadIdx.x].mileage);
+    printf("Thread: %d Brand: %s Make Year: %d Mileage: %f\n", threadIdx.x, results[threadIdx.x].brand, results[threadIdx.x].make_year, results[threadIdx.x].mileage);
 }
 
 /**
@@ -153,9 +154,11 @@ void readCarsFile(vector<Car> *cars) {
     ifstream stream(DATA_FILE);
     json allCarsJson = json::parse(stream);
     auto allCars = allCarsJson["cars"];
+    printf("Pradiniai duomenys:\n");
     for (const json &new_car: allCars) {
         Car tempCar;
         tempCar.from_json(new_car);
+        tempCar.print();
         cars->push_back(tempCar);
     }
 }
@@ -168,7 +171,7 @@ void readCarsFile(vector<Car> *cars) {
  */
 void write_results_to_file(Car* cars, int n, const string file_path, const string title) {
     ofstream file;
-    file.open(file_path, ios_base::app);
+    file.open(file_path);
     file << setw(70) << title << endl
          << "------------------------------------------------------------------------------------------------------------------------"
          << endl

@@ -3,4 +3,4 @@ project(LD_3)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(LD_3 task-a.cpp)
+add_executable(LD_3 task-b.cu)
